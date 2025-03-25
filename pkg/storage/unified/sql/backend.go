@@ -706,6 +706,7 @@ func (b *backend) listAtRevision(ctx context.Context, req *resource.ListRequest,
 	return iter.listRV, err
 }
 
+// readHistory fetches the resource history from the resource_history table.
 func (b *backend) readHistory(ctx context.Context, key *resource.ResourceKey, rv int64, eventType resource.WatchEvent_Type) *resource.BackendReadResponse {
 	_, span := b.tracer.Start(ctx, tracePrefix+".ReadHistory")
 	defer span.End()
@@ -737,7 +738,7 @@ func (b *backend) readHistory(ctx context.Context, key *resource.ResourceKey, rv
 	return res
 }
 
-// listLatest fetches the resources from the resource table.
+// getHistory fetches the resource history from the resource_history table.
 func (b *backend) getHistory(ctx context.Context, req *resource.ListRequest, cb func(resource.ListIterator) error) (int64, error) {
 	// Backwards compatibility for ResourceVersionMatch
 	if req.VersionMatch != nil && req.GetVersionMatchV2() == resource.ResourceVersionMatchV2_UNKNOWN {
